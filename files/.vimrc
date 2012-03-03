@@ -33,6 +33,7 @@ Bundle 'honza/snipmate-snippets'
 Bundle 'Nemo157/glsl.vim'
 Bundle 'plasticboy/vim-markdown'
 Bundle 'kchmck/vim-coffee-script'
+Bundle 'vim-scripts/VimClojure'
 
 " Color scheme.
 Bundle 'altercation/vim-colors-solarized'
@@ -70,7 +71,6 @@ let g:SuperTabDefaultCompletionType = "context"         " Set SuperTab to try an
 let g:SuperTabMappingForward = '<nul>'
 let g:SuperTabMappingBackward = '<s-nul>'
 let g:snips_trigger_key='<c-space>'
-
 colorscheme solarized
 
 au FileType markdown\|rst\|tex\|plaintex setlocal textwidth=80

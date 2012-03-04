@@ -1,11 +1,9 @@
 setup_vcs_info () {
   autoload -Uz vcs_info
-  local start="$PR_BLUE⟡-("
   local vcs="$PR_GREEN%s"
   local branch="$PR_BLUE : $PR_YELLOW%b"
   local lights="%c%u"
   local action="$PR_BLUE | $PR_RED%a"
-  local end="$PR_BLUE)-⟡"
 
   local branch_format="%r"
   local vcs_prompt="${start}${vcs}${branch}${end}"
@@ -42,11 +40,10 @@ setup_prompt () {
   local user="$PR_GREEN%(!.%SROOT%s.%n)"
   local host="$PR_GREEN%m"
   local term="$PR_GREEN%y"
-  local whoami="$PR_BLUE⟡-(${user}$PR_WHITE at ${host}$PR_WHITE on ${term}$PR_BLUE)-⟡"
-  local ruby_version='⟡-(${PR_YELLOW}Ruby Version: $PR_GREEN$(~/.rvm/bin/rvm-prompt 2> /dev/null)$PR_BLUE)-⟡'
+  local whoami="$PR_BLUE${user}$PR_WHITE at ${host}$PR_WHITE"
   local fill='${(e)PR_FILLBAR}'
   local dir='${(%):-%${PR_PWDLEN}<...<${${${vcs_info_msg_1_}/$HOME/~}/%\/$PR_GREEN\./}%<<}'
-  local whereami="$PR_BLUE⟡-($PR_MAGENTA${dir}$PR_BLUE)-⟡"
+  local whereami="$PR_BLUE${dir}"
   local end_first=""
 
   local start_second=""
@@ -56,7 +53,7 @@ setup_prompt () {
   local end_second="$PR_NO_COLOUR "
 
   PROMPT="
-${start_first}${whoami}    ${ruby_version} ${fill}${whereami}${end_first}
+${start_first}${whoami} ${fill}${whereami}${end_first}
 ${start_second}${return_value}${changes}${marker}${end_second}"
 # time ${(e)PR_APM}$PR_YELLOW%D{%H:%M}\
 }
@@ -99,7 +96,7 @@ complex_right () {
   local whereami="$PR_MAGENTA${dir}"
   local vcs_string='$vcs_info_msg_0_'
 
-  RPROMPT="$PR_BLUE${vcs_string} ⟡-(${whereami} | ${ruby_version} | ${whoami})-⟡$PR_NO_COLOUR"
+  RPROMPT="$PR_BLUE${vcs_string} *-(${whereami} | ${ruby_version} | ${whoami})-*$PR_NO_COLOUR"
 }
 
 setup_colours
@@ -132,7 +129,7 @@ precmd () {
   PR_FILLBAR=""
   PR_PWDLEN=""
 
-  local prompt="---(%n at %m on %y)--    --(Ruby Version: $(~/.rvm/bin/rvm-prompt 2> /dev/null))-- --()--"
+  local prompt="%n at %m "
   local promptsize=${#${(%)prompt}}
   local pwdsize=${#${(%):-%~}}
 
@@ -147,3 +144,4 @@ function preexec {
   local CMD=${1[(wr)^(*=*|sudo|ssh|-*)]} #cmd name only, or if this is sudo or ssh, the next cmd
   title "%m: $CMD" "%m: %100>...>$2%<<"
 }
+

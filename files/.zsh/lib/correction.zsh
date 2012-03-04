@@ -1,4 +1,4 @@
-setopt correct_all
+#setopt correct_all
 
 uncorrected_commands=(
   man

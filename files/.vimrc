@@ -35,6 +35,9 @@ Bundle 'plasticboy/vim-markdown'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'vim-scripts/VimClojure'
 
+" Screen.vim
+Bundle 'ervandew/screen'
+
 " Color scheme.
 Bundle 'altercation/vim-colors-solarized'
 
@@ -101,3 +104,29 @@ func! SaveAndMake()
   exec "up"
   exec "make!"
 endfunc
+
+" VimClojure with nailgun server
+let sep=":"
+let classpath = join(
+   \[".",
+   \ "src", "src/main/clojure", "src/main/resources",
+   \ "test", "src/test/clojure", "src/test/resources",
+   \ "classes", "target/classes",
+   \ "lib/*", "lib/dev/*",
+   \ "bin",
+   \ "~/.vim/lib/*"
+   \],
+   \ sep)
+
+let vimclojureRoot = "/home/simon/.vim/bundle/VimClojure"
+let vimclojure#HighlightBuiltins=1
+let vimclojure#HighlightContrib=1
+let vimclojure#DynamicHighlighting=1
+let vimclojure#ParenRainbow=1
+let vimclojure#WantNailgun = 1
+let vimclojure#NailgunClient = vimclojureRoot."/lib/ng"
+
+" Start vimclojure nailgun server (uses screen.vim to manage lifetime)
+nmap <silent> <Leader>sc :execute "ScreenShell java -cp \"" . classpath . sep. vimclojureRoot . "/lib/*" . "\" vimclojure.nailgun.NGServer 127.0.0.1" <cr>
+" Start a generic Clojure repl (uses screen.vim)
+nmap <silent> <Leader>sC :execute "ScreenShell java -cp \"" . classpath . "\" clojure.main" <cr>

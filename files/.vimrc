@@ -86,6 +86,12 @@ map <leader>a= :Tabularize /=<CR>
 map <leader>a: :Tabularize /:\zs<CR>
 map <leader>a" :Tabularize /"<CR>
 map <leader>p :set invpaste<CR>
+map <Right> :bn!<CR>
+map <Left> :bp!<CR>
+map <leader>bd :bd<CR>
+map <leader>e :e ~/.vimrc<CR>
+map <C-Right> <C-w><Right>
+map <C-Left> <C-w><Left>
 
 " Have Vim jump to the last position when reopening a file
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif

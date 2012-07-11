@@ -6,12 +6,12 @@ setup_vcs_info () {
   local action="$PR_BLUE | $PR_RED%a"
 
   local branch_format="%r"
-  local vcs_prompt="${start}${vcs}${branch}${end}"
-  local vcs_action_prompt="${start}${vcs}${branch}${action}${end}"
-  local vcs_path="%R/$PR_GREEN%S"
+  local vcs_prompt="${vcs}${branch}$PR_NO_COLOUR"
+  local vcs_action_prompt="${vcs}${branch}${action}$PR_NO_COLOUR"
+  local vcs_path="$PR_MAGENTA%R/$PR_GREEN%S$PR_NO_COLOUR"
 
-  local staged_str="$PR_YELLOW● "
-  local unstaged_str="$PR_RED● "
+  local staged_str="${PR_YELLOW}● $PR_NO_COLOUR"
+  local unstaged_str="${PR_RED}●  $PR_NO_COLOUR"
 
   zstyle ':vcs_info:*:prompt:*'     check-for-changes true
   zstyle ':vcs_info:*:prompt:*'     stagedstr         $staged_str
@@ -28,34 +28,42 @@ setup_colours () {
 
   for colour in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE BLACK; do
     eval PR_$colour='%{$fg[${(L)colour}]%}'
+    eval PR_BG_$colour='%{$bg[${(L)colour}]%}'
   done
 
   PR_NO_COLOUR="%{$terminfo[sgr0]%}"
 }
 
+#function zle-line-init zle-keymap-select {
+#  VIMODE="${${KEYMAP/vicmd/$PR_YELLOW--}/(main|viins)/$PR_WHITE-/}"
+#  zle reset-prompt
+#}
+#
+#zle -N zle-line-init
+#zle -N zle-keymap-select
+
 setup_prompt () {
   setopt prompt_subst
 
   local start_first=""
-  local user="$PR_GREEN%(!.%SROOT%s.%n)"
+  local user="%(!.$PR_RED.$PR_GREEN)%n"
   local host="$PR_GREEN%m"
-  local term="$PR_GREEN%y"
-  local whoami="$PR_BLUE${user}$PR_WHITE at ${host}$PR_WHITE"
+  local whoami="${user}$PR_WHITE at ${host}$PR_NO_COLOUR$PR_BLUE"
   local fill='${(e)PR_FILLBAR}'
-  local dir='${(%):-%${PR_PWDLEN}<...<${${${vcs_info_msg_1_}/$HOME/~}/%\/$PR_GREEN\./}%<<}'
-  local whereami="$PR_BLUE${dir}"
-  local end_first=""
+  local dir='${(%):-%${PR_PWDLEN}<...<${${${vcs_info_msg_1_}/$HOME/~}/%\/$PR_GREEN\.$PR_NO_COLOUR/$PR_NO_COLOUR}%<<}'
+  local whereami="${dir}$PR_BLUE"
+  local end_first="$PR_NO_COLOUR"
 
   local start_second=""
-  local return_value="%(?.$PR_CYAN%D{%H:%M} .${PR_RED}« %? »$PR_BLUE )"
-  local changes='$vcs_info_msg_2_'
-  local marker="%(!.$PR_RED‼.)$PR_WHITE→"
-  local end_second="$PR_NO_COLOUR "
+  local time='%D{%H:%M}'
+  local return_value='${(%l:3:):-%?}'
+  local extra_info="%(?.$PR_CYAN${time}. $PR_RED${return_value}!)"
+  local marker="${VIMODE}→"
+  local end_second="$PR_NO_COLOUR"
 
   PROMPT="
-${start_first}${whoami} ${fill}${whereami}${end_first}
-${start_second}${return_value}${changes}${marker}${end_second}"
-# time ${(e)PR_APM}$PR_YELLOW%D{%H:%M}\
+${start_first}${whoami}    ${fill}${whereami}${end_first}
+${start_second}${extra_info} ${marker} ${end_second}"
 }
 
 setup_rprompt () {
@@ -69,34 +77,10 @@ setup_rprompt () {
 setup_ps2 () {
   local start=""
   local continuation="$PR_BLUE($PR_GREEN%_$PR_BLUE)"
-  local marker="%(!.$PR_RED‼.)$PR_BLUE →"
+  local marker="%(!.$PR_RED!.)$PR_BLUE ->"
   local end="$PR_NO_COLOUR "
 
   PS2="${start}${continuation}${marker}${end}"
-}
-
-# Removes almost everything from the left prompt
-simple_prompt () {
-  PROMPT="%(!.$PR_RED‼.)$PR_WHITE→$PR_NO_COLOUR "
-}
-
-# Removes EVERYTHING from the right prompt
-no_right () {
-  RPROMPT=""
-}
-
-# Puts a lot of info into the right prompt, useful with the simple_prompt.
-complex_right () {
-  local user="$PR_GREEN%(!.%SROOT%s.%n)"
-  local host="$PR_GREEN%m"
-  local term="$PR_GREEN%y"
-  local whoami="${user}$PR_WHITE@${host}$PR_WHITE:${term}$PR_BLUE"
-  local ruby_version='$PR_GREEN$(~/.rvm/bin/rvm-prompt 2> /dev/null)$PR_BLUE'
-  local dir='%~$PR_BLUE'
-  local whereami="$PR_MAGENTA${dir}"
-  local vcs_string='$vcs_info_msg_0_'
-
-  RPROMPT="$PR_BLUE${vcs_string} *-(${whereami} | ${ruby_version} | ${whoami})-*$PR_NO_COLOUR"
 }
 
 setup_colours
@@ -129,7 +113,7 @@ precmd () {
   PR_FILLBAR=""
   PR_PWDLEN=""
 
-  local prompt="%n at %m "
+  local prompt="%n at %m     "
   local promptsize=${#${(%)prompt}}
   local pwdsize=${#${(%):-%~}}
 

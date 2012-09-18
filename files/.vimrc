@@ -8,6 +8,8 @@ endif
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
+set nolist
+
 " Allows the bundle installation
 Bundle 'gmarik/vundle'
 
@@ -46,6 +48,9 @@ Bundle 'ervandew/screen'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'vim-scripts/Zenburn'
 
+Bundle 'L9'
+Bundle 'FuzzyFinder'
+
 filetype plugin indent on " Automatically detect file types
 syntax enable " Syntax highlighting
 
@@ -56,7 +61,6 @@ set number                                              " Set line numbers on.
 set autoindent                                          " Use smart indentation.
 set background=dark                                     " Who would use a light terminal?
 set showmatch                                           " Show matching brackets.
-set ignorecase smartcase                                " Do smart case matching.
 set incsearch                                           " Incremental search.
 set nowrap                                              " Turn off line wrapping.
 set sidescroll=1                                        " Set how far to scroll when moving off the edge.
@@ -107,8 +111,8 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 
 au BufWritePost vimrc source ~/.vimrc
 
-map <F5> :call SaveAndMake()<CR>
-imap <F5> <C-o>:call SaveAndMake()<CR>
+"map <F5> :call SaveAndMake()<CR>
+"imap <F5> <C-o>:call SaveAndMake()<CR>
 
 vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 
@@ -148,3 +152,15 @@ let vimclojure#NailgunClient = vimclojureRoot."/lib/ng"
 nmap <silent> <Leader>sc :execute "ScreenShell java -cp \"" . classpath . sep. vimclojureRoot . "/lib/*" . "\" vimclojure.nailgun.NGServer 127.0.0.1" <cr>
 " Start a generic Clojure repl (uses screen.vim)
 nmap <silent> <Leader>sC :execute "ScreenShell java -cp \"" . classpath . "\" clojure.main" <cr>
+
+nmap <leader>e :e ~/.vimrc <cr>
+nmap <left> :bp <cr>
+nmap <right> :bn <cr>
+nmap <F5> :wa<cr> :!./%<cr>
+imap <F5> <Esc>:wa<cr> :!./%<cr>
+
+set hidden
+set nolist
+set textwidth=0
+set wrapmargin=0
+:nnoremap <F2> :%s/\<<C-r><C-w>\>/

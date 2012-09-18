@@ -15,3 +15,11 @@ extra_config_files=(
 
 for config_file in $extra_config_files
   [[ -s $config_file ]] && source $config_file
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+export MONO_ROOT=/usr
+export MONO_INCLUDE=/usr/include/mono-2.0
+export MONO_LIBNAME=mono-2.0
+
+disable r

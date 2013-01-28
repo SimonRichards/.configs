@@ -112,13 +112,10 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 
 au BufWritePost vimrc source ~/.vimrc
 
-"map <F5> :call SaveAndMake()<CR>
-"imap <F5> <C-o>:call SaveAndMake()<CR>
+map <F5> :call SaveAndMake()<CR>
+imap <F5> <C-o>:call SaveAndMake()<CR>
 
 vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
-
-" Clear highlighting when <esc> is pressed
-nnoremap <esc> :noh<cr><esc>
 
 command Wq wq
 command -bang Q q<bang>
@@ -127,32 +124,6 @@ func! SaveAndMake()
   exec "up"
   exec "make!"
 endfunc
-
-" VimClojure with nailgun server
-let sep=":"
-let classpath = join(
-   \[".",
-   \ "src", "src/main/clojure", "src/main/resources",
-   \ "test", "src/test/clojure", "src/test/resources",
-   \ "classes", "target/classes",
-   \ "lib/*", "lib/dev/*",
-   \ "bin",
-   \ "~/.vim/lib/*"
-   \],
-   \ sep)
-
-let vimclojureRoot = "/home/simon/.vim/bundle/VimClojure"
-let vimclojure#HighlightBuiltins=1
-let vimclojure#HighlightContrib=1
-let vimclojure#DynamicHighlighting=1
-let vimclojure#ParenRainbow=1
-let vimclojure#WantNailgun = 1
-let vimclojure#NailgunClient = vimclojureRoot."/lib/ng"
-
-" Start vimclojure nailgun server (uses screen.vim to manage lifetime)
-nmap <silent> <Leader>sc :execute "ScreenShell java -cp \"" . classpath . sep. vimclojureRoot . "/lib/*" . "\" vimclojure.nailgun.NGServer 127.0.0.1" <cr>
-" Start a generic Clojure repl (uses screen.vim)
-nmap <silent> <Leader>sC :execute "ScreenShell java -cp \"" . classpath . "\" clojure.main" <cr>
 
 nmap <leader>e :e ~/.vimrc <cr>
 nmap <left> :bp <cr>

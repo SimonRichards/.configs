@@ -27,7 +27,7 @@ Bundle 'MarcWeber/vim-addon-mw-utils'
 Bundle 'tomtom/tlib_vim'
 
 " Clang based C/C++ Completion
-Bundle "Rip-Rip/clang_complete"
+Bundle "exclipy/clang_complete"
 
 " New SnipMate.
 Bundle 'garbas/vim-snipmate'
@@ -50,6 +50,7 @@ Bundle 'vim-scripts/Zenburn'
 
 Bundle 'L9'
 Bundle 'FuzzyFinder'
+Bundle 'mileszs/ack.vim'
 
 filetype plugin indent on " Automatically detect file types
 syntax enable " Syntax highlighting
@@ -164,3 +165,26 @@ set nolist
 set textwidth=0
 set wrapmargin=0
 :nnoremap <F2> :%s/\<<C-r><C-w>\>/
+
+let g:clang_auto_select=1
+let g:clang_complete_auto=0
+let g:clang_complete_copen=1
+let g:clang_hl_errors=1
+let g:clang_periodic_quickfix=0
+let g:clang_snippets=1
+let g:clang_snippets_engine="clang_complete"
+let g:clang_conceal_snippets=1
+let g:clang_exec="clang"
+let g:clang_user_options=""
+let g:clang_auto_user_options="path, .clang_complete"
+let g:clang_use_library=1
+let g:clang_library_path="/usr/lib"
+let g:clang_sort_algo="priority"
+let g:clang_complete_macros=1
+let g:clang_complete_patterns=0
+nnoremap <Leader>q :call g:ClangUpdateQuickFix()<CR>
+
+let g:clic_filename="/home/simon/indices/devel/index.db"
+nnoremap <Leader>r :call ClangGetReferences()<CR>
+nnoremap <Leader>d :call ClangGetDeclarations()<CR>
+nnoremap <Leader>s :call ClangGetSubclasses()<CR>
